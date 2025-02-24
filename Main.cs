@@ -7,7 +7,7 @@ namespace WarGame
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the War Card Game!");
-            WarGame game = new WarGame();
+            War_Game game = new War_Game();
             game.PlayGame();
         }
     }
