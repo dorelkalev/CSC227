@@ -2,13 +2,13 @@ using System;
 
 namespace WarGame
 {
-    internal class War
+    internal class War_Game
     {
         private Deck deck;
         private Player player1;
         private Player player2;
 
-        public WarGame()
+        public War_Game()
         {
             deck = new Deck();
             player1 = new Player("Player 1");
