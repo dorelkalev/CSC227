@@ -1,6 +1,6 @@
 using System;
 
-namespace WarGame
+namespace WarCardGame
 {
     class Program
     {
