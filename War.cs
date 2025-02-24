@@ -2,7 +2,7 @@ using System;
 
 namespace WarGame
 {
-    internal class WarGame
+    internal class War
     {
         private Deck deck;
         private Player player1;
