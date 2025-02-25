@@ -21,7 +21,7 @@ namespace WarGame
 
         public override string ToString()
         {
-            return rank + " of " + suit + ": " + pointValue;
+            return rank + " of " + suit + ": " + rankValue;
         }
     }
 }
