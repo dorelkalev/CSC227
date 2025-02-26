@@ -1,27 +1,28 @@
 using System;
 
-namespace WarGame
+namespace WarCardGame
 {
     internal class Card
     {
         private string suit;
         private string rank;
-        private int rankValue;
+        private int pointValue;
 
-        public Card(string suit, string rank, int rankValue)
+        public Card(string s, string r, int pV)
         {
-            this.suit = suit;
-            this.rank = rank;
-            this.rankValue = rankValue;
+            this.suit = s;
+            this.rank = r;
+            this.pointValue = pV;
         }
 
-        public string GetSuit() { return suit; }
-        public string GetRank() { return rank; }
-        public int GetRankValue() { return rankValue; }
+        public string getSuit() { return suit; }
+        public string getRank() { return rank; }
+        public int getPointValue() { return pointValue; }
+        public void setPointValue(int val) { pointValue = val; } //should only be used for aces.
 
         public override string ToString()
         {
-            return rank + " of " + suit + ": " + rankValue;
+            return rank + " of " + suit + ": " + pointValue;
         }
     }
 }
