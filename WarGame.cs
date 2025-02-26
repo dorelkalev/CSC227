@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace WarCardGame
 {
@@ -30,17 +31,23 @@ namespace WarCardGame
             int round = 1;
             while (player1.CardsRemaining() > 0 && player2.CardsRemaining() > 0)
             {
-                Console.WriteLine($"Round {round}");
-                Console.WriteLine($"Player 1 has {player1.CardsRemaining()} cards");
-                Console.WriteLine($"Player 2 has {player2.CardsRemaining()} cards");
+                Console.WriteLine("Round " + round);
+                Console.WriteLine("Player 1 has " + player1.CardsRemaining() + " cards");
+                Console.WriteLine("Player 2 has " + player2.CardsRemaining() + " cards");
 
                 PlayRound();
 
                 round++;
+                if (player1.CardsRemaining() == 0 || player2.CardsRemaining() == 0)
+                {
+                    break; //End the game if one player has no cards left.
+                }
+
                 Console.WriteLine("Press Enter to continue to the next round.");
                 Console.ReadLine();
             }
 
+            //Check for game end condition
             if (player1.CardsRemaining() == 0)
             {
                 Console.WriteLine("Player 2 wins the game!");
@@ -56,16 +63,23 @@ namespace WarCardGame
             Card player1Card = player1.PlayCard();
             Card player2Card = player2.PlayCard();
 
-            Console.WriteLine($"{player1.Name} plays: {player1Card}");
-            Console.WriteLine($"{player2.Name} plays: {player2Card}");
+            //Check if either player has run out of cards
+            if (player1Card == null || player2Card == null)
+            {
+                Console.WriteLine("One or both players have no cards left to play. The game ends!");
+                return; //End the game if no cards left
+            }
 
-            if (player1Card.GetRankValue() > player2Card.GetRankValue())
+            Console.WriteLine(player1.GetName() + " plays: " + player1Card);
+            Console.WriteLine(player2.GetName() + " plays: " + player2Card);
+
+            if (player1Card.getPointValue() > player2Card.getPointValue())
             {
                 Console.WriteLine("Player 1 wins this round!");
                 player1.AddCard(player1Card);
                 player1.AddCard(player2Card);
             }
-            else if (player2Card.GetRankValue() > player1Card.GetRankValue())
+            else if (player2Card.getPointValue() > player1Card.getPointValue())
             {
                 Console.WriteLine("Player 2 wins this round!");
                 player2.AddCard(player1Card);
@@ -80,11 +94,11 @@ namespace WarCardGame
 
         public void War(Card player1Card, Card player2Card)
         {
-            Queue<Card> player1WarPile = new Queue<Card>();
-            Queue<Card> player2WarPile = new Queue<Card>();
+            List<Card> player1WarPile = new List<Card>();
+            List<Card> player2WarPile = new List<Card>();
 
-            player1WarPile.Enqueue(player1Card);
-            player2WarPile.Enqueue(player2Card);
+            player1WarPile.Add(player1Card);
+            player2WarPile.Add(player2Card);
 
             while (true)
             {
@@ -97,31 +111,56 @@ namespace WarCardGame
                 Console.WriteLine("Players place three cards face down and one card face up...");
                 for (int i = 0; i < 3; i++)
                 {
-                    player1WarPile.Enqueue(player1.PlayCard());
-                    player2WarPile.Enqueue(player2.PlayCard());
+                    Card player1CardToAdd = player1.PlayCard();
+                    Card player2CardToAdd = player2.PlayCard();
+
+                    if (player1CardToAdd == null || player2CardToAdd == null)
+                    {
+                        Console.WriteLine("A player ran out of cards during the war. The game ends!");
+                        return;
+                    }
+
+                    player1WarPile.Add(player1.PlayCard());
+                    player2WarPile.Add(player2.PlayCard());
                 }
 
-                player1WarPile.Enqueue(player1.PlayCard());
-                player2WarPile.Enqueue(player2.PlayCard());
+                player1WarPile.Add(player1.PlayCard());
+                player2WarPile.Add(player2.PlayCard());
 
-                Card player1WarCard = player1WarPile.Peek();
-                Card player2WarCard = player2WarPile.Peek();
+                Card player1WarCard = player1WarPile[0];
+                Card player2WarCard = player2WarPile[0];
 
-                Console.WriteLine($"Player 1's war card: {player1WarCard}");
-                Console.WriteLine($"Player 2's war card: {player2WarCard}");
+                Console.WriteLine("Player 1's war card: " + player1WarCard);
+                Console.WriteLine("Player 2's war card: " + player2WarCard);
 
-                if (player1WarCard.GetRankValue() > player2WarCard.GetRankValue())
+                if (player1WarCard.getPointValue() > player2WarCard.getPointValue())
                 {
                     Console.WriteLine("Player 1 wins the war!");
-                    while (player1WarPile.Count > 0) player1.AddCard(player1WarPile.Dequeue());
-                    while (player2WarPile.Count > 0) player1.AddCard(player2WarPile.Dequeue());
+                    while (player1WarPile.Count > 0)
+                    {
+                        player1.AddCard(player1WarPile[0]);
+                        player1WarPile.RemoveAt(0);
+                    }
+                    while (player2WarPile.Count > 0)
+                    {
+                        player1.AddCard(player2WarPile[0]);
+                        player2WarPile.RemoveAt(0);
+                    }
                     break;
                 }
-                else if (player2WarCard.GetRankValue() > player1WarCard.GetRankValue())
+                else if (player2WarCard.getPointValue() > player1WarCard.getPointValue())
                 {
                     Console.WriteLine("Player 2 wins the war!");
-                    while (player1WarPile.Count > 0) player2.AddCard(player1WarPile.Dequeue());
-                    while (player2WarPile.Count > 0) player2.AddCard(player2WarPile.Dequeue());
+                    while (player1WarPile.Count > 0)
+                    {
+                        player2.AddCard(player1WarPile[0]);
+                        player1WarPile.RemoveAt(0);
+                    }
+                    while (player2WarPile.Count > 0)
+                    {
+                        player2.AddCard(player2WarPile[0]);
+                        player2WarPile.RemoveAt(0);
+                    }
                     break;
                 }
                 else
