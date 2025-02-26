@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WarGame
+namespace WarCardGame
 {
     internal class Deck
     {
@@ -12,10 +12,10 @@ namespace WarGame
 
         public Deck()
         {
-            Initialize();
+            initialize();
         }
 
-        public void Initialize()
+        public void initialize()
         {
             rng = new Random();
             deck = new List<Card>();
@@ -56,6 +56,31 @@ namespace WarGame
                 return card;
             }
             return null;
+        }
+
+        //This may be a useful function in many games.
+        //It is used by our cheating dealer.
+        public Card getCardWithValue(int pointValue)
+        {
+            foreach (Card card in deck)
+            {
+                if (card.getPointValue() == pointValue)
+                {
+                    deck.Remove(card);
+                    return card;
+                }
+            }
+            return null;
+        }
+
+        //Prints all of the Cards in the Deck.  Useful for debugging.
+        public void printDeck()
+        {
+            foreach (Card card in deck)
+            {
+                Console.WriteLine(card);
+            }
+            Console.WriteLine("Total Cards: " + deck.Count);
         }
 
         public int CardsRemaining() => deck.Count;
