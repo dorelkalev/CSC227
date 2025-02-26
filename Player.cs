@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WarGame
+namespace WarCardGame
 {
     internal class Player
     {
@@ -52,5 +52,6 @@ namespace WarGame
         {
             hand.Clear();
         }
+
     }
 }
